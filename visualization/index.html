@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSP Visualizer - Visualisation Interactive</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗺️ TSP Visualizer</h1>
+            <p>Visualisation interactive du Problème du Voyageur de Commerce</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Panneau de contrôle -->
+            <aside class="control-panel">
+                <h2>📂 Charger les données</h2>
+                
+                <div class="file-upload">
+                    <label for="tsp-file">Fichier .tsp (Coordonnées)</label>
+                    <input type="file" id="tsp-file" accept=".tsp" />
+                    <span class="file-status" id="tsp-status">Aucun fichier</span>
+                </div>
+
+                <div class="file-upload">
+                    <label for="out-file">Fichier .out (Solution - Optionnel)</label>
+                    <input type="file" id="out-file" accept=".out" />
+                    <span class="file-status" id="out-status">Aucun fichier</span>
+                </div>
+
+                <div class="file-upload">
+                    <label for="json-file">Fichier .json (Solution complète - Optionnel)</label>
+                    <input type="file" id="json-file" accept=".json" />
+                    <span class="file-status" id="json-status">Aucun fichier</span>
+                </div>
+
+                <button id="visualize-btn" disabled>🎨 Visualiser</button>
+
+                <hr>
+
+                <div class="stats" id="stats">
+                    <h3>📊 Statistiques</h3>
+                    <p>Chargez un fichier pour voir les statistiques</p>
+                </div>
+
+                <hr>
+
+                <div class="display-options">
+                    <h3>⚙️ Options d'affichage</h3>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-cities" checked />
+                        Afficher les villes
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-path" checked />
+                        Afficher le chemin
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-initial" />
+                        Afficher solution initiale
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-labels" />
+                        Afficher les numéros
+                    </label>
+
+                    <button id="reset-zoom">🔍 Réinitialiser le zoom</button>
+                </div>
+            </aside>
+
+            <!-- Zone de visualisation -->
+            <main class="visualization-area">
+                <div class="canvas-container">
+                    <canvas id="tsp-canvas"></canvas>
+                    <div class="canvas-info">
+                        <p>🖱️ Cliquez et déplacez pour pan | 🔍 Molette pour zoomer</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <p>Développé pour le projet TSP - M2 Optimisation</p>
+        </footer>
+    </div>
+
+    <script src="visualizer.js"></script>
+</body>
+</html>

@@ -217,6 +217,28 @@ if __name__ == "__main__":
             f_out.write(str(optimized_cost) + "\n")
         print("\nFichier '100_local_search.out' généré avec succès.")
 
+        # Génération du fichier JSON pour visualisation web (avec MDS)
+        try:
+            from mds_coordinates import export_matrix_solution_to_json
+            
+            print("\n" + "="*60)
+            print("📊 Génération du fichier JSON pour visualisation web")
+            print("="*60)
+            
+            export_matrix_solution_to_json(
+                filename=filename,
+                distance_matrix=matrix,
+                initial_path=initial_path,
+                initial_cost=initial_cost,
+                optimized_path=optimized_path,
+                optimized_cost=optimized_cost
+            )
+        except ImportError:
+            print("\n⚠️  Module 'mds_coordinates' non trouvé.")
+            print("Pour générer le JSON avec visualisation, installez: pip install scikit-learn numpy")
+        except Exception as e:
+            print(f"\n⚠️  Erreur lors de la génération du JSON: {e}")
+
     except FileNotFoundError:
         print(f"Erreur : Le fichier {filename} est introuvable.")
     except Exception as e:

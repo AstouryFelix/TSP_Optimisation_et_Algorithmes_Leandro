@@ -1,6 +1,7 @@
 import time
 import random
 import math
+import json
 
 def read_tsp_file(filename):
     """
@@ -345,6 +346,24 @@ if __name__ == "__main__":
             # Ligne 2 : Le coût
             f_out.write(str(optimized_cost) + "\n")
         print(f"\nFichier '{output_filename}' généré avec succès.")
+
+        # Génération du fichier JSON pour visualisation web
+        json_filename = filename.split("/")[-1].replace(".tsp", "_solution.json")
+        json_data = {
+            "instance": filename.split("/")[-1].replace(".tsp", ""),
+            "n_cities": n,
+            "coordinates": [[lat, lon] for lat, lon in coords],
+            "initial_path": initial_path,
+            "initial_cost": initial_cost,
+            "optimized_path": optimized_path,
+            "optimized_cost": optimized_cost,
+            "improvement": initial_cost - optimized_cost,
+            "edge_weight_type": edge_weight_type
+        }
+        
+        with open(json_filename, "w") as f_json:
+            json.dump(json_data, f_json, indent=2)
+        print(f"Fichier '{json_filename}' généré avec succès (pour visualisation web).")
 
     except FileNotFoundError:
         print(f"Erreur : Le fichier {filename} est introuvable.")
