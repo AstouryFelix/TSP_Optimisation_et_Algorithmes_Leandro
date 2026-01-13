@@ -301,7 +301,7 @@ def local_search_2opt(path, matrix):
 
 # --- MAIN ---
 if __name__ == "__main__":
-    filename = "donnees_autre/ali535.tsp"  
+    filename = "../data/Input/ali535.tsp"  
     
     try:
         print(f"--- Lecture de {filename} ---")
