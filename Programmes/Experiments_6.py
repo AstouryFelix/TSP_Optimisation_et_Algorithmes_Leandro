@@ -17,11 +17,16 @@ import math
 import sys
 import os
 
-# Import des algo
-from Constructive_3 import build_distance_matrix, calculate_total_cost, constructive_nearest_neighbor
-from LocalSearch_4 import local_search_2opt
-from GraspTSP_5 import run_grasp
-from Exact_2 import BranchAndBoundTSP
+# Import des algo (Nouvelle Structure src)
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+from src.model.tsp_model import build_distance_matrix, calculate_total_cost
+from src.constructive.nearest_neighbor import constructive_nearest_neighbor
+from src.local_search.two_opt import local_search_2opt
+from src.grasp.grasp import run_grasp
+from src.exact.branch_and_bound import BranchAndBoundTSP
 
 def generate_random_instance(n, width=100, height=100):
     """Génère n points aléatoires dans un rectangle."""
@@ -154,15 +159,11 @@ if __name__ == "__main__":
     with open('experiments_log.txt', 'w') as f:
         sys.stdout = f
         try:
-            # On veut quand même voir le tableau dans la console, donc on va ruser
-            # Actually, `BranchAndBound` prints a lot.
-            # Modified strategy: Let's rely on the fact that I didn't remove prints from algos.
-            # I will run it and let the user see the logs or I capture them.
-            if os.path.exists("Exact_2.py"): # Just a dummy check
-                pass
-        except:
-             pass
-        sys.stdout = original_stdout
-        
-    print("Lancement des expérimentations... (Ignorer les logs intermédiaires)")
-    run_experiments()
+            print("Lancement des expérimentations... (Logs complets)")
+            run_experiments()
+        except Exception as e:
+             print(f"Erreur: {e}")
+        finally:
+            sys.stdout = original_stdout
+            
+    print("Expérimentations terminées. Voir experiments_log.txt pour les détails.")
