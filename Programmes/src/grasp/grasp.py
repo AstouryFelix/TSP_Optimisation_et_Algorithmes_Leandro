@@ -59,8 +59,20 @@ def run_grasp(n, matrix, max_iterations=20, alpha=3):
 
 if __name__ == "__main__":
     print("=== TEST Q5: GRASP ===")
-    filename = "../../data/Input/ali535.tsp"
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+    filename = os.path.join(base_dir, "data", "Input", "ali535.tsp")
+    
     if os.path.exists(filename):
         n, mat = load_data(filename)
         path, cost = run_grasp(n, mat)
         print(f"Cout GRASP: {cost}")
+        
+        # Sauvegarde
+        # On remonte de src/grasp/ (2 niveaux) vers Programmes/ puis vers data (donc ../../../data)
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+        out_file = os.path.join(base_dir, "data", "Solutions", "ali535_GRASP_solution.out")
+        
+        # S'assurer que le dossier existe
+        os.makedirs(os.path.dirname(out_file), exist_ok=True)
+        
+        save_solution(out_file, path, cost)

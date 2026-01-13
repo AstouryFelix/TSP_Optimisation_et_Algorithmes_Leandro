@@ -36,7 +36,9 @@ def constructive_nearest_neighbor(n, matrix, start_node=0):
 
 if __name__ == "__main__":
     print("=== TEST Q3: NEAREST NEIGHBOR ===")
-    filename = "../../data/Input/100.in"
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+    filename = os.path.join(base_dir, "data", "Input", "100.in")
+    
     if os.path.exists(filename):
         n, mat = load_data(filename)
         path = constructive_nearest_neighbor(n, mat)

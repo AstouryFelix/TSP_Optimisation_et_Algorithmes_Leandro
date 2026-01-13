@@ -71,9 +71,14 @@ def run_grasp(n, matrix, max_iterations=20, alpha=3):
 if __name__ == "__main__":
     print("=== TEST QUESTION 5 : GRASP ===")
     
-    filename = "../data/Input/ali535.tsp"
+    # Utilisation de chemins absolus basés sur l'emplacement du script
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    # On remonte d'un cran (Programmes/ -> Root/)
+    root_dir = os.path.dirname(base_dir)
+    filename = os.path.join(root_dir, "data", "Input", "101.in")
+
     if not os.path.exists(filename):
-        print("Fichier manquant.")
+        print(f"Fichier manquant : {filename}")
         exit()
         
     n, matrix = load_data(filename)
@@ -88,5 +93,9 @@ if __name__ == "__main__":
     print(f"\nRésultat Final GRASP (Alpha={best_alpha}) : {cost}")
     print(f"Temps total : {(time.time()-t0):.2f}s")
     
-    save_solution(f"../data/Solutions/ali535_GRASP_Final.out", path, cost)
-    export_to_json(filename, matrix, path, cost, "_GRASP_Final")
+    # Correction chemin de sortie
+    out_file = os.path.join(root_dir, "data", "Solutions", "101_GRASP_Final.out")
+    save_solution(out_file, path, cost)
+    # Note: export_to_json pourrait aussi avoir besoin d'une correction de path si elle n'est pas robuste
+    # Mais on utilise Generate_Visu_Data désormais.
+    # export_to_json(filename, matrix, path, cost, "_GRASP_Final") # Cette ligne est redondante ou problématique si mal configurée.

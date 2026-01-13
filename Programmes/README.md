@@ -37,5 +37,33 @@ Le script `Experiments_6.py` permet de lancer un comparatif complet.
 py Experiments_6.py
 ```
 
+## Visualisation des Résultats
+
+Pour visualiser une solution dans l'interface web, suivez cette procédure :
+
+### 1. Générer le fichier Solution (.out)
+Modifiez le script de l'algorithme (ex: `src/grasp/grasp.py`) pour choisir votre fichier d'entrée (`filename`).
+Ensuite, exécutez le script :
+```bash
+py src/grasp/grasp.py
+```
+Cela créera un fichier solution dans `data/Solutions/` (ex: `101_GRASP_Final.out`).
+
+### 2. Générer les Données de Visualisation (.json)
+Utilisez le script `Generate_Visu_Data.py` avec le fichier d'entrée et le fichier solution :
+
+**Syntaxe :**
+```bash
+py Generate_Visu_Data.py <CHEMIN_INPUT> <CHEMIN_OUTPUT>
+```
+
+**Exemple concret :**
+```bash
+py Generate_Visu_Data.py ../data/Input/101.in ../data/Solutions/101_GRASP_Final.out
+```
+
+### 3. Afficher
+Ouvrez `visualization/index.html` dans votre navigateur et chargez le fichier JSON généré (ex: `101_GRASP_Final.json`).
+
 ## Auteurs
 Équipe Projet TSP

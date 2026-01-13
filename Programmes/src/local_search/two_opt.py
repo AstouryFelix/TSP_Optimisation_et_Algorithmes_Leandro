@@ -40,7 +40,9 @@ if __name__ == "__main__":
     # On importe le NN.
     from src.constructive.nearest_neighbor import constructive_nearest_neighbor
     
-    filename = "../../data/Input/100.in"
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+    filename = os.path.join(base_dir, "data", "Input", "100.in")
+    
     if os.path.exists(filename):
         n, mat = load_data(filename)
         init_path = constructive_nearest_neighbor(n, mat)
