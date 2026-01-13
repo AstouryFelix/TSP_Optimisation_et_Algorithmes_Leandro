@@ -339,7 +339,7 @@ if __name__ == "__main__":
         print(optimized_path)
 
         # Génération du fichier de sortie
-        output_filename = filename.split("/")[-1].replace(".tsp", "_local_search.out")
+        output_filename = "../data/Solutions/" + filename.split("/")[-1].replace(".tsp", "_local_search.out")
         with open(output_filename, "w") as f_out:
             # Ligne 1 : Les villes séparées par un espace
             f_out.write(" ".join(map(str, optimized_path)) + "\n")
@@ -348,7 +348,7 @@ if __name__ == "__main__":
         print(f"\nFichier '{output_filename}' généré avec succès.")
 
         # Génération du fichier JSON pour visualisation web
-        json_filename = filename.split("/")[-1].replace(".tsp", "_solution.json")
+        json_filename = "../data/Solutions/" + filename.split("/")[-1].replace(".tsp", "_solution.json")
         json_data = {
             "instance": filename.split("/")[-1].replace(".tsp", ""),
             "n_cities": n,

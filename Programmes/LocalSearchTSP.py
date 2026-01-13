@@ -210,15 +210,24 @@ if __name__ == "__main__":
 
         # Génération du fichier de sortie demandé (format instance_method.out)
         # Nom : 100_local_search.out
-        with open("100_local_search.out", "w") as f_out:
+        output_filename = "../data/Solutions/100_local_search.out"
+        with open(output_filename, "w") as f_out:
             # Ligne 1 : Les villes séparées par un espace
             f_out.write(" ".join(map(str, optimized_path)) + "\n")
             # Ligne 2 : Le coût
             f_out.write(str(optimized_cost) + "\n")
-        print("\nFichier '100_local_search.out' généré avec succès.")
+        print(f"\nFichier '{output_filename}' généré avec succès.")
 
         # Génération du fichier JSON pour visualisation web (avec MDS)
         try:
+            import sys
+            import os
+            
+            # Ajout du dossier Tools au path pour l'import
+            tools_path = os.path.join(os.path.dirname(__file__), 'Tools')
+            if tools_path not in sys.path:
+                sys.path.append(tools_path)
+                
             from mds_coordinates import export_matrix_solution_to_json
             
             print("\n" + "="*60)
@@ -231,7 +240,8 @@ if __name__ == "__main__":
                 initial_path=initial_path,
                 initial_cost=initial_cost,
                 optimized_path=optimized_path,
-                optimized_cost=optimized_cost
+                optimized_cost=optimized_cost,
+                output_filename="../data/Solutions/100_solution.json"
             )
         except ImportError:
             print("\n⚠️  Module 'mds_coordinates' non trouvé.")
