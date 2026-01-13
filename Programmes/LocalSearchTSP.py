@@ -176,7 +176,7 @@ def local_search_2opt(path, matrix):
 
 # --- MAIN ---
 if __name__ == "__main__":
-    filename = "Projet/100.in" 
+    filename = "../data/Input/100.in" 
     
     try:
         print(f"--- Lecture de {filename} ---")
