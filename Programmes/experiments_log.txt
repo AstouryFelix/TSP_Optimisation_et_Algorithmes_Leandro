@@ -1,0 +1,119 @@
+Lancement des expérimentations... (Logs complets)
+N     | ALGO            | COUT MOYEN   | TEMPS MOYEN (s) | GAP (%)   
+---------------------------------------------------------------------------
+--- COMPARAISON EXACT VS HEURISTIQUES (Petites tailles) ---
+  [Init] Upper Bound (NN): 214
+  > New Best: 206
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 206
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 209
+GRASP running (Alpha=2, Iter=10)...
+4     | Exact           | 207.0        | 0.00000         | 0.0       %
+4     | Cons(NN)        | 209.7        | 0.00000         | 1.3       %
+4     | Loc(2Opt)       | 207.0        | 0.00000         | 0.0       %
+4     | GRASP           | 207.0        | 0.00017         | 0.0       %
+---------------------------------------------------------------------------
+  [Init] Upper Bound (NN): 213
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 303
+  > New Best: 277
+  > New Best: 261
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 279
+  > New Best: 269
+GRASP running (Alpha=2, Iter=10)...
+6     | Exact           | 247.7        | 0.00022         | 0.0       %
+6     | Cons(NN)        | 265.0        | 0.00000         | 7.0       %
+6     | Loc(2Opt)       | 251.0        | 0.00000         | 1.3       %
+6     | GRASP           | 247.7        | 0.00000         | 0.0       %
+---------------------------------------------------------------------------
+  [Init] Upper Bound (NN): 291
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 296
+  > New Best: 294
+  > New Best: 286
+  > New Best: 253
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 230
+  > New Best: 219
+GRASP running (Alpha=2, Iter=10)...
+8     | Exact           | 254.3        | 0.00639         | 0.0       %
+8     | Cons(NN)        | 272.3        | 0.00000         | 7.1       %
+8     | Loc(2Opt)       | 266.7        | 0.00000         | 4.8       %
+8     | GRASP           | 254.3        | 0.00018         | 0.0       %
+---------------------------------------------------------------------------
+  [Init] Upper Bound (NN): 282
+  > New Best: 280
+  > New Best: 274
+  > New Best: 255
+  > New Best: 251
+  > New Best: 248
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 309
+  > New Best: 299
+  > New Best: 297
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 294
+  > New Best: 288
+  > New Best: 277
+  > New Best: 257
+  > New Best: 238
+  > New Best: 231
+GRASP running (Alpha=2, Iter=10)...
+10    | Exact           | 258.7        | 0.37152         | 0.0       %
+10    | Cons(NN)        | 295.0        | 0.00017         | 14.0      %
+10    | Loc(2Opt)       | 262.0        | 0.00000         | 1.3       %
+10    | GRASP           | 258.7        | 0.00090         | 0.0       %
+---------------------------------------------------------------------------
+  [Init] Upper Bound (NN): 263
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 262
+  > New Best: 256
+  > New Best: 246
+GRASP running (Alpha=2, Iter=10)...
+  [Init] Upper Bound (NN): 396
+  > New Best: 395
+  > New Best: 356
+  > New Best: 349
+  > New Best: 348
+  > New Best: 341
+GRASP running (Alpha=2, Iter=10)...
+11    | Exact           | 283.3        | 0.68468         | 0.0       %
+11    | Cons(NN)        | 307.0        | 0.00000         | 8.4       %
+11    | Loc(2Opt)       | 299.0        | 0.00000         | 5.5       %
+11    | GRASP           | 283.3        | 0.00089         | 0.0       %
+---------------------------------------------------------------------------
+
+
+--- COMPARAISON HEURISTIQUES SEULEMENT (Tailles moy/grandes) ---
+(Exact désactivé car trop lent)
+---------------------------------------------------------------------------
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+10    | Cons(NN)        | 378.3        | 0.00034         | 6.2       %
+10    | Loc(2Opt)       | 360.7        | 0.00000         | 1.2       %
+10    | GRASP           | 356.3        | 0.00108         | 0.0       %
+---------------------------------------------------------------------------
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+20    | Cons(NN)        | 443.3        | 0.00000         | 14.2      %
+20    | Loc(2Opt)       | 395.0        | 0.00000         | 1.7       %
+20    | GRASP           | 388.3        | 0.00452         | 0.0       %
+---------------------------------------------------------------------------
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+50    | Cons(NN)        | 737.7        | 0.00018         | 29.3      %
+50    | Loc(2Opt)       | 575.3        | 0.00205         | 0.9       %
+50    | GRASP           | 570.3        | 0.04431         | 0.0       %
+---------------------------------------------------------------------------
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+GRASP running (Alpha=2, Iter=20)...
+100   | Cons(NN)        | 993.3        | 0.00053         | 20.9      %
+100   | Loc(2Opt)       | 828.3        | 0.00558         | 0.8       %
+100   | GRASP           | 821.7        | 0.14384         | 0.0       %
+---------------------------------------------------------------------------
