@@ -169,8 +169,8 @@ function parseOUTFile(content) {
 
 // ==================== VÉRIFICATION ET STATS ====================
 function checkReadyToVisualize() {
-    // On peut visualiser si on a le .tsp
-    const ready = state.tspData !== null;
+    // On peut visualiser si on a le .tsp OU si on a un JSON complet
+    const ready = state.tspData !== null || state.jsonData !== null;
     elements.visualizeBtn.disabled = !ready;
 }
 
