@@ -4,8 +4,11 @@ Question 4 : Recherche Locale (2-Opt)
 Ce module implémente l'amélioration locale 2-Opt.
 Il importe les outils nécessaires depuis Constructive_3.py.
 """
-
-from Constructive_3 import load_data, calculate_total_cost, constructive_nearest_neighbor, save_solution, export_to_json
+from Tools.load_data      import *
+from Tools.total_cost     import *
+from Tools.export_to_json import *
+from Tools.save_solution  import *
+from Constructive_3 import constructive_nearest_neighbor
 import time
 import os
 
@@ -16,12 +19,15 @@ def local_search_2opt(path, matrix):
     n = len(path)
     improved = True
     best_path = path[:] 
+    print("================= PATH =================")
+    print(path)
+    print("================= best_path =================")
+    print(best_path)
     
     while improved:
         improved = False
         for i in range(n - 1):
             for j in range(i + 2, n): 
-                if j == n - 1 and i == 0: continue
                 
                 u, v = best_path[i], best_path[i+1]
                 x, y = best_path[j], best_path[(j + 1) % n]

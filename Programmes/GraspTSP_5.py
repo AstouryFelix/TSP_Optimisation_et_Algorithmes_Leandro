@@ -5,11 +5,16 @@ Implémentation de Greedy Randomized Adaptive Search Procedure.
 Importe les modules précédents.
 """
 
-from Constructive_3 import load_data, calculate_total_cost, save_solution, export_to_json
+from Tools.load_data      import *
+from Tools.total_cost     import *
+from Tools.export_to_json import *
+from Tools.save_solution  import *
 from LocalSearch_4 import local_search_2opt
 import random
 import time
 import os
+
+
 
 def constructive_randomized_nearest_neighbor(n, matrix, alpha=1, start_node=0):
     """
