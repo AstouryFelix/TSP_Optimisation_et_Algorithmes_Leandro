@@ -23,7 +23,7 @@ try:
     from src.model.tsp_model import load_data, build_distance_matrix
 except ImportError:
     # Fallback si lancé depuis un autre dossier ou structure non standard
-    from Constructive_3 import load_data, build_distance_matrix
+    from _3_Constructive import load_data, build_distance_matrix
 
 # --- MDS Logic (Intégrée pour être autonome ou via import) ---
 def generate_mds_coords(distance_matrix):

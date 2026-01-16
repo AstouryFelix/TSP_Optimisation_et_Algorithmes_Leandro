@@ -8,7 +8,7 @@ from Tools.load_data      import *
 from Tools.total_cost     import *
 from Tools.export_to_json import *
 from Tools.save_solution  import *
-from Constructive_3 import constructive_nearest_neighbor
+from _3_Constructive import constructive_nearest_neighbor
 import time
 import os
 

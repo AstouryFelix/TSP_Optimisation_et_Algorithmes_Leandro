@@ -9,7 +9,7 @@ from Tools.load_data      import *
 from Tools.total_cost     import *
 from Tools.export_to_json import *
 from Tools.save_solution  import *
-from LocalSearch_4 import local_search_2opt
+from _4_LocalSearch import local_search_2opt
 import random
 import time
 import os
