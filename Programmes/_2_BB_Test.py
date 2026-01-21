@@ -212,14 +212,15 @@ class TSP_ILP_Solver:
             return None
         return [p + 1 for p in path] # Return 1-based indexing for output
 
-    def solve(self):
+    def solve(self, verbose=True):
         # Priority Queue for Best-First Search strategy (minimizing lower bound)
         # Item: (lower_bound, unique_id, fixed_vars_dict)
         pq = []
         heapq.heappush(pq, (0, 0, {}))
         node_counter = 0
 
-        print(f"Starting Branch and Bound for N={self.n}...")
+        if verbose:
+            print(f"Starting Branch and Bound for N={self.n}...")
         
         while pq:
             lb, _, fixed_vars = heapq.heappop(pq)
@@ -262,7 +263,8 @@ class TSP_ILP_Solver:
                 # but we must continue until queue empty or bounds exceed this.
                 path = self.extract_path(res.x)
                 if path and current_cost < self.best_cost:
-                    print(f"New best integer solution found: Cost {current_cost}")
+                    if verbose:
+                        print(f"New best integer solution found: Cost {current_cost}")
                     self.best_cost = current_cost
                     self.best_path = path
             else:
@@ -282,7 +284,7 @@ class TSP_ILP_Solver:
                 heapq.heappush(pq, (current_cost, node_counter, vars_1))
                 
             self.nodes_explored += 1
-            if self.nodes_explored % 100 == 0:
+            if self.nodes_explored % 100 == 0 and verbose:
                 print(f"Nodes explored: {self.nodes_explored}, Queue size: {len(pq)}, Current Best: {self.best_cost}")
 
         return self.best_cost, self.best_path

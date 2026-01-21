@@ -1,0 +1,37 @@
+======================================================================
+       RAPPORT D'EXPÉRIMENTATION - TSP
+       Généré le 2026-01-21 20:07
+======================================================================
+
+ALGORITHMES TESTÉS:
+----------------------------------------
+1. Exact (Branch & Bound)
+   - Complexité: O(n! / 2) pire cas, élagage améliore en pratique
+   - Limite pratique: n ≤ 15
+
+2. Nearest Neighbor (Constructif)
+   - Complexité: O(n²)
+   - Gap typique: 15-25%
+
+3. 2-Opt (Recherche Locale)
+   - Complexité: O(n² × iterations)
+   - Gap typique: 2-10%
+
+4. GRASP (Métaheuristique)
+   - Paramètres calibrés: α=2, 30 itérations
+   - Gap typique: 0-5%
+
+FICHIERS GÉNÉRÉS:
+----------------------------------------
+- small_instances_results.csv
+- large_instances_results.csv
+- scalability_results.csv
+- instance_types_results.csv
+- *.png (graphiques)
+
+CONCLUSIONS:
+----------------------------------------
+1. L'algorithme exact garantit l'optimalité mais est limité à ~15 villes.
+2. GRASP offre le meilleur compromis qualité/temps pour n > 20.
+3. 2-Opt améliore significativement NN avec un coût temps modéré.
+4. Les performances varient selon le type d'instance.

@@ -19,10 +19,6 @@ def local_search_2opt(path, matrix):
     n = len(path)
     improved = True
     best_path = path[:] 
-    print("================= PATH =================")
-    print(path)
-    print("================= best_path =================")
-    print(best_path)
     
     while improved:
         improved = False
