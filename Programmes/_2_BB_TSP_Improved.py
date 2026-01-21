@@ -11,9 +11,8 @@ from Tools.export_to_json import *
 
 class TSP_ILP_Solver:
     def __init__(self, cost_matrix):
-        # Force float type for infinity handling
-        self.matrix = np.array(cost_matrix, dtype=float)
-        self.N = len(cost_matrix)
+        self.matrix    = np.array(cost_matrix, dtype=float)
+        self.N         = len(cost_matrix)
         self.best_cost = float('inf')
         self.best_path = []
         
@@ -24,8 +23,7 @@ class TSP_ILP_Solver:
         """
         Solves the Assignment Problem on the CURRENT state of self.matrix
         """
-        # Scipy linear_sum_assignment handles 'inf' by avoiding those edges 
-        # (unless impossible, then it might pick them, so we check cost)
+        # Résout le problème manière optimale, sans vérifier la faisabilité du TSP
         row_ind, col_ind = linear_sum_assignment(self.matrix)
         cost = self.matrix[row_ind, col_ind].sum()
         
@@ -33,7 +31,7 @@ class TSP_ILP_Solver:
         edges = []
         for r, c in zip(row_ind, col_ind):
             edges.append((r, c))
-            
+        
         return cost, edges
 
     def find_subtours(self, edges):
@@ -68,19 +66,16 @@ class TSP_ILP_Solver:
         return self.best_cost, self.best_path
 
     def _recursive_solve(self, current_lb, current_edges, depth):
-        # 1. Pruning: If current node is worse than best found solution, stop.
-        # Note: We use >= because we need strictly better to improve
         if current_lb >= self.best_cost:
             return
 
-        # 2. Check for Subtours
         subtours = self.find_subtours(current_edges)
 
-        # 3. If Valid Solution (1 subtour of length N)
+        # Une solution valide n'a qu'un circuit de longueur N
         if len(subtours) == 1 and len(subtours[0]) == self.N:
             if current_lb < self.best_cost:
                 self.best_cost = current_lb
-                self.best_path = subtours[0] + [subtours[0][0]] # close the loop
+                self.best_path = subtours[0] + [subtours[0][0]] 
                 print(f"{depth:<6} {current_lb:<10.2f} {self.best_cost:<10.2f} 🏆 NEW OPTIMUM")
             return
 
@@ -136,7 +131,6 @@ if __name__ == "__main__":
     inf = float('inf')
     file1 = "../data/Input/17.in"
     N, matrix = load_data(file1)
-    print("launched")
     solver = TSP_ILP_Solver(matrix)
     cost, path = solver.solve()
     print("Optimization finished.")
