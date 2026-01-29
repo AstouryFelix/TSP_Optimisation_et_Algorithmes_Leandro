@@ -4,6 +4,10 @@ Question 4 : Recherche Locale (2-Opt)
 Ce module implémente l'amélioration locale 2-Opt.
 Il importe les outils nécessaires depuis Constructive_3.py.
 """
+
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
 from src.model.load_data      import *
 from src.model.total_cost     import *
 from src.model.export_to_json import *

@@ -4,6 +4,9 @@ import heapq
 import os
 import json
 
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
 from src.model.load_data      import *
 from src.model.total_cost     import *
 from src.model.export_to_json import *

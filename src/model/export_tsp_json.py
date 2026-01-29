@@ -81,7 +81,7 @@ def export_solution_to_json(filename, coords, initial_path, initial_cost,
     with open(output_filename, "w", encoding="utf-8") as f_json:
         json.dump(json_data, f_json, indent=2, ensure_ascii=False)
     
-    print(f"✅ Fichier '{output_filename}' généré avec succès (pour visualisation web).")
+    print(f"Fichier '{output_filename}' généré avec succès (pour visualisation web).")
     
     return output_filename
 
@@ -119,8 +119,3 @@ if __name__ == "__main__":
         optimized_cost=example_optimized_cost,
         edge_weight_type="GEO"
     )
-    
-    print("\n📋 Pour l'intégrer dans votre code:")
-    print("1. Importez la fonction: from export_tsp_json import export_solution_to_json")
-    print("2. Appelez-la après avoir calculé votre solution optimisée")
-    print("3. Le fichier JSON sera généré automatiquement")

@@ -105,12 +105,12 @@ def export_matrix_solution_to_json(filename, distance_matrix, initial_path, init
     """
     import json
     
-    print("🔄 Génération des coordonnées 2D à partir de la matrice de distances...")
+    print("Génération des coordonnées 2D à partir de la matrice de distances...")
     
     # Générer les coordonnées avec MDS
     coordinates = generate_coordinates_from_matrix(distance_matrix)
     
-    print(f"✅ Coordonnées générées pour {len(coordinates)} villes")
+    print(f"Coordonnées générées pour {len(coordinates)} villes")
     
     # Déterminer le nom du fichier de sortie
     if output_filename is None:

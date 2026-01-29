@@ -8,8 +8,7 @@ Il contient :
 - L'algorithme Constructif (Plus proche voisin)
 """
 
-import os
-import sys
+import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from src.model.load_data import *
 from src.model.total_cost import *
