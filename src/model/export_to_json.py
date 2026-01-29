@@ -19,7 +19,7 @@ def export_to_json(filename_instance, matrix, path, cost, suffix="_solution"):
     
     try:
         inst_name = os.path.basename(filename_instance).replace(".tsp","").replace(".in","")
-        json_path = f"data/Solutions/{inst_name}{suffix}.json"
+        json_path = f"Solutions/{inst_name}{suffix}.json"
         
         # Créer le dossier si nécessaire
         os.makedirs(os.path.dirname(json_path), exist_ok=True)

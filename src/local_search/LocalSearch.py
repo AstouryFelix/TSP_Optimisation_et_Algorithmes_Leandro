@@ -43,17 +43,31 @@ if __name__ == "__main__":
     print("=== TEST QUESTION 4 : LOCAL SEARCH (2-OPT) ===")
     
     # Liste des fichiers à tester
-    files = ["../data/Input/100.in", "../data/Input/ali535.tsp"]
+    # Liste des fichiers à tester
+    files_to_try = ["100.in", "ali535.tsp"]
     
-    for filename in files:
-        if not os.path.exists(filename):
-            print(f"Fichier manquant: {filename}")
+    for fname in files_to_try:
+        # Chercher le fichier
+        paths = [
+            f"instances/local_search/{fname}",
+            f"../instances/local_search/{fname}",
+            f"../../instances/local_search/{fname}"
+        ]
+        
+        file_path = None
+        for p in paths:
+            if os.path.exists(p):
+                file_path = p
+                break
+        
+        if not file_path:
+            print(f"Fichier manquant: {fname} (cherché dans instances/local_search/)")
             continue
             
-        print(f"\n--- Instance : {os.path.basename(filename)} ---")
+        print(f"\n--- Instance : {os.path.basename(file_path)} ---")
         
         # 1. Chargement
-        n, matrix = load_data(filename)
+        n, matrix = load_data(file_path)
         
         # 2. Construction Initiale (Q3)
         t0 = time.time()
@@ -69,6 +83,7 @@ if __name__ == "__main__":
         print(f"Gain : {init_cost - opt_cost}")
         
         # 4. Sauvegarde
-        base_name = os.path.basename(filename).replace(".in","").replace(".tsp","")
-        save_solution(f"../../data/Solutions/{base_name}_local_search.out", opt_path, opt_cost)
-        export_to_json(filename, matrix, opt_path, opt_cost, "_local_search")
+        base_name = os.path.basename(file_path).replace(".in","").replace(".tsp","")
+        outfile = f"Solutions/{base_name}_local_search.out"
+        save_solution(outfile, opt_path, opt_cost)
+        export_to_json(file_path, matrix, opt_path, opt_cost, "_local_search")

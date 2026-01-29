@@ -117,9 +117,9 @@ Ce résultat correspond au cycle 1 → 2 → 3 → 4 → 1 avec un coût total d
 
 | Type | Emplacement |
 |------|-------------|
-| Fichiers d'entrée | `instances/{method}/` ou directement spécifié |
-| Fichiers de sortie (.out) | Généré dans le répertoire de travail courant ou `data/Solutions/` |
-| Fichiers JSON (visualisation) | `data/Solutions/` |
+| Fichiers d'entrée | `instances/{method}/` |
+| Fichiers de sortie (.out) | `Solutions/` |
+| Fichiers JSON (visualisation) | `Solutions/` |
 
 ---
 

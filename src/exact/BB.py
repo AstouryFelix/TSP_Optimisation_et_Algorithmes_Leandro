@@ -195,15 +195,36 @@ class TSP_ILP_Solver:
         return self.best_cost, self.best_path
 
 if __name__ == "__main__":
+    import os
     inf = float('inf')
-    file1 = "../../data/Input/17.in" 
+    
+    # Recherche du fichier 17.in
+    possible_paths = [
+        "instances/exact/17.in",
+        "../instances/exact/17.in",
+        "../../instances/exact/17.in"
+    ]
+    
+    file1 = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            file1 = p
+            break
+            
+    if not file1:
+        print("Erreur : fichier 17.in introuvable dans instances/exact/")
+        import sys
+        sys.exit(1)
 
+    print(f"Chargement de {file1}...")
     N, matrix = load_data(file1)
     solver = TSP_ILP_Solver(matrix)
     cost, path = solver.solve()
     print("Optimization finished.")
     print(f"Min Cost: {cost}")
     print(f"Path: {path}")
+    
     base_name = os.path.basename(file1).replace(".in","").replace(".tsp","")
-    save_solution(f"../../data/Solutions/{base_name}_exact.out", path, cost, zero_based=False)
+    outfile = f"Solutions/{base_name}_exact.out"
+    save_solution(outfile, path, cost, zero_based=False)
     export_to_json(file1, matrix, path, cost, "_BB")

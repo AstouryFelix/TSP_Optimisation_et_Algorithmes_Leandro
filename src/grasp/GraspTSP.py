@@ -562,7 +562,7 @@ if __name__ == "__main__":
             # Sauvegarder
             # Sauvegarder
             base_name = os.path.basename(instance_file).replace(".in", "").replace(".tsp", "")
-            out_path = f"{base_name}_grasp.out"
+            out_path = f"Solutions/{base_name}_grasp.out"
             save_solution(out_path, path, cost)
             export_to_json(instance_file, matrix, path, cost, "_grasp")
         else:

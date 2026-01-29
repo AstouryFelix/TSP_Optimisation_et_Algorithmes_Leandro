@@ -9,10 +9,12 @@ Il contient :
 """
 
 import os
-from model.load_data      import *
-from model.total_cost     import *
-from model.export_to_json import *
-from model.save_solution  import *
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from src.model.load_data import *
+from src.model.total_cost import *
+from src.model.export_to_json import *
+from src.model.save_solution import *
 
 def constructive_nearest_neighbor(n, matrix, start_node=0):
     """Algorithme glouton du plus proche voisin."""
@@ -42,24 +44,58 @@ def constructive_nearest_neighbor(n, matrix, start_node=0):
 if __name__ == "__main__":
     print("=== TEST QUESTION 3 : NEAREST NEIGHBOR ===")
     
-    # Test sur 100.in
-    file1 = "../data/Input/100.in"
-    if os.path.exists(file1):
+    # Test sur 100.in (depuis la racine du projet ou dossier courant)
+    # On cherche le fichier dans les emplacements possibles
+    possible_paths_100 = [
+        "instances/constructive/100.in",
+        "../instances/constructive/100.in",
+        "../../instances/constructive/100.in"
+    ]
+    
+    file1 = None
+    for p in possible_paths_100:
+        if os.path.exists(p):
+            file1 = p
+            break
+            
+    if file1:
         print(f"\nTraitement de {file1}...")
         n, mat = load_data(file1)
         path = constructive_nearest_neighbor(n, mat)
         cost = calculate_total_cost(path, mat)
         print(f"Cout NN: {cost}")
-        save_solution("../data/Solutions/100_constructive.out", path, cost)
+        
+        # Sauvegarde
+        base_name = os.path.basename(file1).replace(".in","").replace(".tsp","")
+        outfile = f"Solutions/{base_name}_constructive.out"
+        save_solution(outfile, path, cost)
         export_to_json(file1, mat, path, cost, "_constructive")
+    else:
+        print("Fichier 100.in introuvable dans instances/constructive/")
 
     # Test sur ali535.tsp
-    file2 = "../data/Input/ali535.tsp"
-    if os.path.exists(file2):
+    possible_paths_ali = [
+        "instances/constructive/ali535.tsp",
+        "../instances/constructive/ali535.tsp",
+        "../../instances/constructive/ali535.tsp"
+    ]
+    
+    file2 = None
+    for p in possible_paths_ali:
+        if os.path.exists(p):
+            file2 = p
+            break
+
+    if file2:
         print(f"\nTraitement de {file2}...")
         n, mat = load_data(file2)
         path = constructive_nearest_neighbor(n, mat)
         cost = calculate_total_cost(path, mat)
         print(f"Cout NN: {cost}")
-        save_solution("../data/Solutions/ali535_constructive.out", path, cost)
+        
+        base_name = os.path.basename(file2).replace(".in","").replace(".tsp","")
+        outfile = f"Solutions/{base_name}_constructive.out"
+        save_solution(outfile, path, cost)
         export_to_json(file2, mat, path, cost, "_constructive")
+    else:
+        print("Fichier ali535.tsp introuvable dans instances/constructive/")

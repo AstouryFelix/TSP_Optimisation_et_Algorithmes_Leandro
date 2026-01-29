@@ -26,12 +26,12 @@ def test_full_flow():
     path, cost, _ = run_grasp(n, matrix, max_iterations=5, alpha=2, verbose=False)
     
     # 3. Save
-    out_file = "att48_grasp.out"
+    out_file = "Solutions/att48_grasp.out"
     save_solution(out_file, path, cost, zero_based=True)
     
     # 4. Verify Output
     if not os.path.exists(out_file):
-        print("Error: Output file not created")
+        print(f"Error: Output file not created at {out_file}")
         return
         
     with open(out_file, 'r') as f:
