@@ -261,5 +261,5 @@ if __name__ == "__main__":
     print(f"Min Cost: {cost}")
     print(f"Path: {path}")
     base_name = os.path.basename(file1).replace(".in","").replace(".tsp","")
-    save_solution(f"../data/Solutions/{base_name}_BB.out", path, cost)
+    save_solution(f"../data/Solutions/{base_name}_exact.out", path, cost)
     export_to_json(file1, matrix, path, cost, "_BB")

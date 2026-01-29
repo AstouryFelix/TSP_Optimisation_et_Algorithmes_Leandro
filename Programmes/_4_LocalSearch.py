@@ -70,5 +70,5 @@ if __name__ == "__main__":
         
         # 4. Sauvegarde
         base_name = os.path.basename(filename).replace(".in","").replace(".tsp","")
-        save_solution(f"../data/Solutions/{base_name}_2opt.out", opt_path, opt_cost)
-        export_to_json(filename, matrix, opt_path, opt_cost, "_2opt")
+        save_solution(f"../data/Solutions/{base_name}_local_search.out", opt_path, opt_cost)
+        export_to_json(filename, matrix, opt_path, opt_cost, "_local_search")
