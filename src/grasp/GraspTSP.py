@@ -489,7 +489,7 @@ if __name__ == "__main__":
     import sys
     
     instance_file = "instances/grasp/ali535.tsp"
-    ALPHA = 1
+    ALPHA = 2
     ITERATIONS = 30
     
     possible_paths = [
