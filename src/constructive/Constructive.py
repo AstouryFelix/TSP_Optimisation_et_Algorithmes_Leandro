@@ -9,12 +9,10 @@ Il contient :
 """
 
 import os
-from src.model.load_data      import *
-from src.model.total_cost     import *
-from src.model.export_to_json import *
-from src.model.save_solution  import *
-
-# --- ALGORITHME Q3 : NEAREST NEIGHBOR ---
+from model.load_data      import *
+from model.total_cost     import *
+from model.export_to_json import *
+from model.save_solution  import *
 
 def constructive_nearest_neighbor(n, matrix, start_node=0):
     """Algorithme glouton du plus proche voisin."""
