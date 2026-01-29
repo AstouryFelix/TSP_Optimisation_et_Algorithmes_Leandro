@@ -21,13 +21,15 @@ import time
 import argparse
 
 # Ajout du dossier courant au path pour les imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Ajout de la racine du projet au path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from Tools.load_data import load_data
-from _2_BB_Test import TSP_ILP_Solver
-from _3_Constructive import constructive_nearest_neighbor, calculate_total_cost
-from _4_LocalSearch import local_search_2opt
-from _5_GraspTSP import run_grasp
+from src.model.load_data import load_data
+from src.exact.BB import TSP_ILP_Solver
+from src.constructive.Constructive import constructive_nearest_neighbor
+from src.local_search.LocalSearch import local_search_2opt
+from src.grasp.GraspTSP import run_grasp
+from src.model.total_cost import calculate_total_cost
 
 def run_comparison(file_path, force_exact=False):
     if not os.path.exists(file_path):

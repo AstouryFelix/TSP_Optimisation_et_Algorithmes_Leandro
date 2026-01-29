@@ -48,7 +48,10 @@ def generate_random_in_file(n, filename, width=1000, height=1000):
     return filename
 
 def run_benchmark(start, end, step):
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "Benchmark")
+    # Chemin vers la racine du projet : ../../
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(base_dir, "../.."))
+    output_dir = os.path.join(project_root, "instances", "benchmark")
     os.makedirs(output_dir, exist_ok=True)
     
     print("="*70)

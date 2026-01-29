@@ -26,25 +26,15 @@ from datetime import datetime
 
 # Configuration des chemins
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, BASE_DIR)
+# Ajouter la racine du projet
+sys.path.insert(0, os.path.abspath(os.path.join(BASE_DIR, '../..')))
 
-# Imports des algorithmes
-from _3_Constructive import (
-    load_data, calculate_total_cost, build_distance_matrix,
-    constructive_nearest_neighbor
-)
-from _4_LocalSearch import local_search_2opt
-from _2_BB_Test import TSP_ILP_Solver
-
-# Import GRASP (nouvelle version)
-try:
-    from _5_GraspTSP import run_grasp
-except ImportError:
-    # Fallback si l'import échoue
-    print("Warning: Impossible d'importer _5_GraspTSP, définition locale")
-    def run_grasp(n, matrix, max_iterations=30, alpha=2, **kwargs):
-        from _5_GraspTSP import run_grasp as _run_grasp
-        return _run_grasp(n, matrix, max_iterations, alpha)
+from src.model.load_data import load_data, build_distance_matrix
+from src.model.total_cost import calculate_total_cost
+from src.constructive.Constructive import constructive_nearest_neighbor
+from src.local_search.LocalSearch import local_search_2opt
+from src.exact.BB import TSP_ILP_Solver
+from src.grasp.GraspTSP import run_grasp
 
 # Matplotlib pour les graphiques
 try:

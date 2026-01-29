@@ -17,13 +17,13 @@ import json
 import math
 
 # Ajout du path pour les modules src
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 try:
-    from src.model.tsp_model import load_data, build_distance_matrix
-except ImportError:
-    # Fallback si lancé depuis un autre dossier ou structure non standard
-    from _3_Constructive import load_data, build_distance_matrix
+    from src.model.load_data import load_data, build_distance_matrix
+except ImportError as e:
+    print(f"Erreur d'import : {e}")
+    sys.exit(1)
 
 # --- MDS Logic (Intégrée pour être autonome ou via import) ---
 def generate_mds_coords(distance_matrix):
