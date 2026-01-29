@@ -7,54 +7,43 @@ import json
 # --- Helper Functions (Mocking the data loading/saving) ---
 
 def load_data(filepath):
-    """Parses a TSP input file."""
-    try:
-        with open(filepath, 'r') as f:
-            lines = f.readlines()
-            
-        # Heuristic parser:
-        coords = []
-        read_coords = False
-        N = 0
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
         
-        for line in lines:
-            if "DIMENSION" in line:
-                N = int(line.split()[-1])
-            if "NODE_COORD_SECTION" in line:
-                read_coords = True
-                continue
-            if "EOF" in line:
-                break
-            if read_coords:
-                parts = line.strip().split()
-                if len(parts) >= 3:
-                    coords.append((float(parts[1]), float(parts[2])))
-        
-        if not coords:
-            # Fallback for explicit matrix format if file structure differs
-            # Assuming the file might just contain N and then the matrix
-            parts = [float(x) for x in open(filepath).read().split()]
-            N = int(parts[0])
-            matrix = np.array(parts[1:]).reshape(N, N)
-            return N, matrix
-
-        # Compute Euclidean distance matrix from coords
-        N = len(coords)
-        matrix = np.zeros((N, N))
-        for i in range(N):
-            for j in range(N):
-                if i != j:
-                    matrix[i][j] = np.sqrt((coords[i][0] - coords[j][0])**2 + (coords[i][1] - coords[j][1])**2)
-                else:
-                    matrix[i][j] = float('inf') # No self loops
+    # Heuristic parser:
+    coords = []
+    read_coords = False
+    N = 0
+    
+    for line in lines:
+        if "DIMENSION" in line:
+            N = int(line.split()[-1])
+        if "NODE_COORD_SECTION" in line:
+            read_coords = True
+            continue
+        if "EOF" in line:
+            break
+        if read_coords:
+            parts = line.strip().split()
+            if len(parts) >= 3:
+                coords.append((float(parts[1]), float(parts[2])))
+    
+    if not coords:
+        parts = [float(x) for x in open(filepath).read().split()]
+        N = int(parts[0])
+        matrix = np.array(parts[1:]).reshape(N, N)
         return N, matrix
 
-    except Exception as e:
-        print(f"Error loading file: {e}. Using dummy random data for N=5.")
-        N = 5
-        matrix = np.random.rand(5, 5) * 10
-        np.fill_diagonal(matrix, float('inf'))
-        return N, matrix
+    N = len(coords)
+    matrix = np.zeros((N, N))
+    for i in range(N):
+        for j in range(N):
+            if i != j:
+                matrix[i][j] = np.sqrt((coords[i][0] - coords[j][0])**2 + (coords[i][1] - coords[j][1])**2)
+            else:
+                matrix[i][j] = float('inf') 
+    return N, matrix
+
 
 def save_solution(filepath, path, cost):
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -72,7 +61,6 @@ def export_to_json(filepath, matrix, path, cost, suffix):
     with open(outfile, 'w') as f:
         json.dump(data, f, indent=4)
 
-# --- The Branch and Bound Solver ---
 
 class TSP_ILP_Solver:
     def __init__(self, matrix):
@@ -82,10 +70,6 @@ class TSP_ILP_Solver:
         self.best_path = []
         self.nodes_explored = 0
         
-        # --- Pre-calculate Linear Programming Constraints ---
-        # Variables: x_ij for all i!=j (size: n*(n-1)) + u_i for i=1..n-1 (size: n-1)
-        # We flatten x_ij row by row. 
-        # Map (i,j) -> index in variable vector
         self.x_map = {}
         self.idx_to_ij = {}
         count = 0
@@ -97,23 +81,17 @@ class TSP_ILP_Solver:
                     count += 1
         self.num_x = count
         
-        # Map u_i -> index (offset by num_x). u_i exists for i in 1..n-1 (indices 1 to n-1)
         self.u_start_idx = self.num_x
         self.num_u = self.n - 1 
         self.total_vars = self.num_x + self.num_u
         
-        # Objective function (c vector): minimize sum(d_ij * x_ij) + 0 * u_i
         self.c = np.zeros(self.total_vars)
         for (i, j), idx in self.x_map.items():
             self.c[idx] = self.matrix[i][j]
 
-        # --- Equality Constraints (A_eq, b_eq) ---
-        # 1. sum_j x_ij = 1 for all i (Leaving each city)
-        # 2. sum_i x_ij = 1 for all j (Entering each city)
         self.A_eq = []
         self.b_eq = []
         
-        # Eq (5): sum_j x_ij = 1
         for i in range(self.n):
             row = np.zeros(self.total_vars)
             for j in range(self.n):
@@ -122,7 +100,6 @@ class TSP_ILP_Solver:
             self.A_eq.append(row)
             self.b_eq.append(1)
             
-        # Eq (6): sum_i x_ij = 1
         for j in range(self.n):
             row = np.zeros(self.total_vars)
             for i in range(self.n):
@@ -131,10 +108,6 @@ class TSP_ILP_Solver:
             self.A_eq.append(row)
             self.b_eq.append(1)
 
-        # --- Inequality Constraints (A_ub, b_ub) ---
-        # Eq (7): u_i - u_j + 1 <= (n-1)(1 - x_ij)
-        # Rearranged: u_i - u_j + (n-1)x_ij <= n - 2
-        # Valid for i, j in {1, ..., n-1}, i != j
         self.A_ub = []
         self.b_ub = []
         
@@ -142,12 +115,8 @@ class TSP_ILP_Solver:
             for j in range(1, self.n):
                 if i != j:
                     row = np.zeros(self.total_vars)
-                    # Coeff for u_i is 1
-                    # u indices map: u_1 -> index 0 relative to u_start, u_k -> k-1
                     row[self.u_start_idx + (i - 1)] = 1 
-                    # Coeff for u_j is -1
                     row[self.u_start_idx + (j - 1)] = -1
-                    # Coeff for x_ij is (n-1)
                     if (i, j) in self.x_map:
                          row[self.x_map[(i, j)]] = self.n - 1
                     
@@ -159,28 +128,18 @@ class TSP_ILP_Solver:
         Solves the LP relaxation with current branching constraints.
         fixed_vars: dict {var_index: value (0 or 1)}
         """
-        # Bounds: 0 <= x_ij <= 1, 2 <= u_i <= n (Wait, u_i is 1..n in formula? 
-        # User snippet: ui in {2...n}. In 0-indexed code, u variables correspond to nodes 1..n-1.
-        # Value range 1..(n-1) effectively if relative to node 0? 
-        # MTZ standard: 1 <= u_i <= n-1 usually. Let's assume loose continuous bounds for U.
         
         bounds = []
-        # Bounds for x variables
         for k in range(self.num_x):
             if k in fixed_vars:
                 val = fixed_vars[k]
-                bounds.append((val, val)) # Fixed to 0 or 1
+                bounds.append((val, val))
             else:
-                bounds.append((0, 1)) # Relaxed 0 to 1
+                bounds.append((0, 1)) 
         
-        # Bounds for u variables (dummy vars for subtour elimination)
-        # User constraint (8): u_i in {2, ..., n}
-        # In code, our u vars represent nodes 1 to n-1. 
-        # Let's map {2..n} literally.
         for _ in range(self.num_u):
             bounds.append((2, self.n)) 
 
-        # Solve LP using Highs method (Simplex/Interior Point)
         res = linprog(c=self.c, A_eq=self.A_eq, b_eq=self.b_eq, 
                       A_ub=self.A_ub, b_ub=self.b_ub, bounds=bounds, method='highs')
         
@@ -190,11 +149,10 @@ class TSP_ILP_Solver:
         """Reconstructs the tour from binary x variables."""
         adj = {}
         for idx, val in enumerate(x_values[:self.num_x]):
-            if val > 0.9: # Integer check
+            if val > 0.9: 
                 i, j = self.idx_to_ij[idx]
                 adj[i] = j
         
-        # Build path
         path = [0]
         current = 0
         visited = {0}
