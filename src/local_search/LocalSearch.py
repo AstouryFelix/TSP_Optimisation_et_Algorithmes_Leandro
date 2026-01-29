@@ -1,10 +1,3 @@
-"""
-Question 4 : Recherche Locale (2-Opt)
-=====================================
-Ce module implémente l'amélioration locale 2-Opt.
-Il importe les outils nécessaires depuis Constructive_3.py.
-"""
-
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
@@ -44,50 +37,56 @@ def local_search_2opt(path, matrix):
 
 # --- MAIN (TEST Q4) ---
 if __name__ == "__main__":
-    print("=== TEST QUESTION 4 : LOCAL SEARCH (2-OPT) ===")
+    import sys
+    import os
+    import time
     
-    # Liste des fichiers à tester
-    # Liste des fichiers à tester
-    files_to_try = ["100.in", "ali535.tsp"]
+    print("=== LOCAL SEARCH (2-OPT) ===")
     
-    for fname in files_to_try:
-        # Chercher le fichier
-        paths = [
-            f"instances/local_search/{fname}",
-            f"../instances/local_search/{fname}",
-            f"../../instances/local_search/{fname}"
-        ]
+    # 1. Récupération du fichier
+    if len(sys.argv) > 1:
+        instance_file = sys.argv[1]
+    else:
+        # Test pas défaut
+        instance_file = "instances/new_instances/random_5.in"
+        print(f"Aucun fichier spécifié, utilisation par défaut : {instance_file}")
         
-        file_path = None
-        for p in paths:
-            if os.path.exists(p):
-                file_path = p
-                break
-        
-        if not file_path:
-            print(f"Fichier manquant: {fname} (cherché dans instances/local_search/)")
-            continue
+    # 2. Exécution directe
+    if os.path.exists(instance_file):
+        print(f"Resolving: {instance_file}")
+        try:
+            # 1. Chargement
+            n, matrix = load_data(instance_file)
             
-        print(f"\n--- Instance : {os.path.basename(file_path)} ---")
-        
-        # 1. Chargement
-        n, matrix = load_data(file_path)
-        
-        # 2. Construction Initiale (Q3)
-        t0 = time.time()
-        init_path = constructive_nearest_neighbor(n, matrix)
-        init_cost = calculate_total_cost(init_path, matrix)
-        print(f"Initial (NN) : {init_cost} ({(time.time()-t0):.2f}s)")
-        
-        # 3. Amélioration (Q4)
-        t1 = time.time()
-        opt_path = local_search_2opt(init_path, matrix)
-        opt_cost = calculate_total_cost(opt_path, matrix)
-        print(f"Optimisé (2-Opt) : {opt_cost} ({(time.time()-t1):.2f}s)")
-        print(f"Gain : {init_cost - opt_cost}")
-        
-        # 4. Sauvegarde
-        base_name = os.path.basename(file_path).replace(".in","").replace(".tsp","")
-        outfile = f"Solutions/{base_name}_local_search.out"
-        save_solution(outfile, opt_path, opt_cost)
-        export_to_json(file_path, matrix, opt_path, opt_cost, "_local_search")
+            # 2. Construction Initiale (Q3)
+            t0 = time.time()
+            init_path = constructive_nearest_neighbor(n, matrix)
+            init_cost = calculate_total_cost(init_path, matrix)
+            print(f"Initial (NN) : {init_cost} ({(time.time()-t0):.2f}s)")
+            
+            # 3. Amélioration (Q4)
+            t1 = time.time()
+            opt_path = local_search_2opt(init_path, matrix)
+            opt_cost = calculate_total_cost(opt_path, matrix)
+            elapsed = time.time()-t1
+            print(f"Optimisé (2-Opt) : {opt_cost} ({elapsed:.2f}s)")
+            print(f"Gain : {init_cost - opt_cost}")
+            
+            # 4. Sauvegarde
+            base_name = os.path.basename(instance_file).replace(".in","").replace(".tsp","")
+            outfile = f"Solutions/{base_name}_local_search.out"
+            
+            os.makedirs("Solutions", exist_ok=True)
+            
+            save_solution(outfile, opt_path, opt_cost)
+            export_to_json(instance_file, matrix, opt_path, opt_cost, "_local_search")
+            print("Sortie générée dans Solutions/")
+            
+        except Exception as e:
+            print(f"Erreur: {e}")
+            import traceback
+            traceback.print_exc()
+            
+    else:
+        print(f"Erreur : Le fichier '{instance_file}' n'existe pas.")
+        print(f"Usage: python {os.path.basename(__file__)} <fichier_instance>")

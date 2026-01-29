@@ -136,7 +136,7 @@ def export_matrix_solution_to_json(filename, distance_matrix, initial_path, init
     with open(output_filename, "w", encoding="utf-8") as f_json:
         json.dump(json_data, f_json, indent=2, ensure_ascii=False)
     
-    print(f"✅ Fichier '{output_filename}' généré avec succès (pour visualisation web).")
+    print(f"Fichier '{output_filename}' généré avec succès (pour visualisation web).")
     
     return output_filename
 

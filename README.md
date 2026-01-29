@@ -53,30 +53,28 @@ team_1/
 
 ## Compilation / Exécution
 
-Le projet est en **Python**, aucune compilation n'est nécessaire.
-
 ### Exécution d'un algorithme individuel
+
+Tous les scripts sont paramétrables et prennent en argument le chemin vers le fichier d'instance (fichiers `.tsp` ou `.in`).
 
 Depuis la racine du projet :
 
 ```bash
 # Algorithme Exact (Branch & Bound)
-python -m src.exact.BB
+python src/exact/BB.py instances/exact/17.in
 
 # Heuristique Constructive (Nearest Neighbor)
-python -m src.constructive.Constructive
+python src/constructive/Constructive.py instances/constructive/100.in
 
 # Recherche Locale (2-Opt)
-python -m src.local_search.LocalSearch
+python src/local_search/LocalSearch.py instances/local_search/ali535.tsp
 
 # GRASP
-python -m src.grasp.GraspTSP
-# Options: --calibrate (calibration des paramètres), --test (test rapide)
+python src/grasp/GraspTSP.py instances/grasp/ali535.tsp
 ```
 
-### Exécution avec un fichier d'instance spécifique
-
-Vous pouvez modifier les fichiers individuels pour spécifier l'instance à résoudre, ou utiliser le script principal (si disponible).
+Si aucun argument n'est fourni, une instance par défaut (ex: `ali535.tsp` ou `100.in`) est utilisée pour un test rapide.
+Les fichiers de sortie (`.out` et `.json`) sont automatiquement générés dans le dossier `Solutions/`.
 
 ---
 

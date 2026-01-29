@@ -198,36 +198,57 @@ class TSP_ILP_Solver:
         return self.best_cost, self.best_path
 
 if __name__ == "__main__":
+    import sys
     import os
-    inf = float('inf')
+    import time
     
-    # Recherche du fichier 17.in
-    possible_paths = [
-        "instances/exact/17.in",
-        "../instances/exact/17.in",
-        "../../instances/exact/17.in"
-    ]
-    
-    file1 = None
-    for p in possible_paths:
-        if os.path.exists(p):
-            file1 = p
-            break
-            
-    if not file1:
-        print("Erreur : fichier 17.in introuvable dans instances/exact/")
-        import sys
-        sys.exit(1)
+    print("=== EXACT (Branch & Bound) ===")
 
-    print(f"Chargement de {file1}...")
-    N, matrix = load_data(file1)
-    solver = TSP_ILP_Solver(matrix)
-    cost, path = solver.solve()
-    print("Optimization finished.")
-    print(f"Min Cost: {cost}")
-    print(f"Path: {path}")
-    
-    base_name = os.path.basename(file1).replace(".in","").replace(".tsp","")
-    outfile = f"Solutions/{base_name}_exact.out"
-    save_solution(outfile, path, cost, zero_based=False)
-    export_to_json(file1, matrix, path, cost, "_BB")
+    # 1. Récupération du fichier (Confiance aveugle)
+    if len(sys.argv) > 1:
+        instance_file = sys.argv[1]
+    else:
+        # Test pas défaut
+        instance_file = "instances/new_instances/random_5.in"
+        print(f"Aucun fichier spécifié, utilisation par défaut : {instance_file}")
+        
+    # 2. Exécution directe
+    if os.path.exists(instance_file):
+        print(f"Resolving: {instance_file}")
+        
+        try:
+            N, matrix = load_data(instance_file)
+            
+            # Warning si N trop grand
+            if N > 20: 
+                print(f"ATTENTION: N={N} est grand pour l'algo exact. Cela peut prendre du temps (ou crasher).")
+                # input("Appuyez sur Entrée pour continuer ou Ctrl+C pour annuler...")
+            
+            solver = TSP_ILP_Solver(matrix)
+            
+            t0 = time.time()
+            cost, path = solver.solve(verbose=True)
+            elapsed = time.time() - t0
+            
+            print("Optimization finished.")
+            print(f"Min Cost: {cost}")
+            print(f"Path: {path}")
+            print(f"Temps: {elapsed:.2f}s")
+            
+            # Sauvegarde
+            base_name = os.path.basename(instance_file).replace(".in","").replace(".tsp","")
+            outfile = f"Solutions/{base_name}_exact.out"
+            
+            os.makedirs("Solutions", exist_ok=True)
+            
+            save_solution(outfile, path, cost, zero_based=False)
+            export_to_json(instance_file, matrix, path, cost, "_BB")
+            print("Sortie générée dans Solutions/")
+            
+        except Exception as e:
+            print(f"Erreur: {e}")
+            import traceback
+            traceback.print_exc()
+    else:
+        print(f"Erreur : Le fichier '{instance_file}' n'existe pas.")
+        print(f"Usage: python {os.path.basename(__file__)} <fichier_instance>")

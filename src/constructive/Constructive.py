@@ -1,13 +1,3 @@
-"""
-Question 3 : Heuristique Constructive (Nearest Neighbor)
-========================================================
-Ce module sert de base pour le projet TSP.
-Il contient :
-- Les fonctions de lecture de fichier (.in et .tsp)
-- Le calcul de la matrice de distances (Euclidien / GEO)
-- L'algorithme Constructif (Plus proche voisin)
-"""
-
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from src.model.load_data import *
@@ -41,60 +31,50 @@ def constructive_nearest_neighbor(n, matrix, start_node=0):
 
 # --- MAIN (TEST Q3) ---
 if __name__ == "__main__":
-    print("=== TEST QUESTION 3 : NEAREST NEIGHBOR ===")
-    
-    # Test sur 100.in (depuis la racine du projet ou dossier courant)
-    # On cherche le fichier dans les emplacements possibles
-    possible_paths_100 = [
-        "instances/constructive/100.in",
-        "../instances/constructive/100.in",
-        "../../instances/constructive/100.in"
-    ]
-    
-    file1 = None
-    for p in possible_paths_100:
-        if os.path.exists(p):
-            file1 = p
-            break
+    import sys
+    import os
+    import time
+
+    # 1. Récupération du fichier (Confiance aveugle)
+    if len(sys.argv) > 1:
+        instance_file = sys.argv[1]
+    else:
+        # Fallback pour test simple
+        instance_file = "instances/new_instances/random_5.in"
+        print(f"Aucun fichier spécifié, utilisation par défaut : {instance_file}")
+
+    # 2. Exécution directe
+    if os.path.exists(instance_file):
+        print(f"=== NEAREST NEIGHBOR ===")
+        print(f"Resolving: {instance_file}")
+        
+        try:
+            n, mat = load_data(instance_file)
             
-    if file1:
-        print(f"\nTraitement de {file1}...")
-        n, mat = load_data(file1)
-        path = constructive_nearest_neighbor(n, mat)
-        cost = calculate_total_cost(path, mat)
-        print(f"Cout NN: {cost}")
-        
-        # Sauvegarde
-        base_name = os.path.basename(file1).replace(".in","").replace(".tsp","")
-        outfile = f"Solutions/{base_name}_constructive.out"
-        save_solution(outfile, path, cost)
-        export_to_json(file1, mat, path, cost, "_constructive")
+            t0 = time.time()
+            
+            path = constructive_nearest_neighbor(n, mat)
+            
+            elapsed = time.time() - t0
+            cost = calculate_total_cost(path, mat)
+            
+            print(f"Cout NN: {cost}")
+            print(f"Temps: {elapsed:.4f}s")
+            
+            # Sauvegarde
+            base_name = os.path.basename(instance_file).replace(".in","").replace(".tsp","")
+            outfile = f"Solutions/{base_name}_constructive.out"
+            
+            os.makedirs("Solutions", exist_ok=True)
+            
+            save_solution(outfile, path, cost)
+            export_to_json(instance_file, mat, path, cost, "_constructive")
+            print("Sortie générée dans Solutions/")
+            
+        except Exception as e:
+            print(f"Erreur: {e}")
+            import traceback
+            traceback.print_exc()
     else:
-        print("Fichier 100.in introuvable dans instances/constructive/")
-
-    # Test sur ali535.tsp
-    possible_paths_ali = [
-        "instances/constructive/ali535.tsp",
-        "../instances/constructive/ali535.tsp",
-        "../../instances/constructive/ali535.tsp"
-    ]
-    
-    file2 = None
-    for p in possible_paths_ali:
-        if os.path.exists(p):
-            file2 = p
-            break
-
-    if file2:
-        print(f"\nTraitement de {file2}...")
-        n, mat = load_data(file2)
-        path = constructive_nearest_neighbor(n, mat)
-        cost = calculate_total_cost(path, mat)
-        print(f"Cout NN: {cost}")
-        
-        base_name = os.path.basename(file2).replace(".in","").replace(".tsp","")
-        outfile = f"Solutions/{base_name}_constructive.out"
-        save_solution(outfile, path, cost)
-        export_to_json(file2, mat, path, cost, "_constructive")
-    else:
-        print("Fichier ali535.tsp introuvable dans instances/constructive/")
+        print(f"Erreur : Le fichier '{instance_file}' n'existe pas.")
+        print(f"Usage: python {os.path.basename(__file__)} <fichier_instance>")
