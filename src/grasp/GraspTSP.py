@@ -485,87 +485,41 @@ def run_full_calibration(output_dir="calibration_results"):
         "convergence": (avg_history, conv_iter)
     }
 
-
-# =============================================================================
-# MAIN - TESTS ET CALIBRATION
-# =============================================================================
-
 if __name__ == "__main__":
-    print("="*70)
-    print("           QUESTION 5 : MÉTAHEURISTIQUE GRASP")
-    print("="*70)
-    
-    # Définir le répertoire de base
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(base_dir, "calibration_results")
-    
-    # Mode de fonctionnement
     import sys
     
-    if len(sys.argv) > 1 and sys.argv[1] == "--calibrate":
-        # Mode calibration complète
-        run_full_calibration(output_dir)
+    instance_file = "instances/grasp/ali535.tsp"
+    ALPHA = 1
+    ITERATIONS = 30
     
-    elif len(sys.argv) > 1 and sys.argv[1] == "--test":
-        # Mode test rapide sur une instance
-        print("\n--- TEST RAPIDE ---")
-        _, matrix = generate_random_instance(50, seed=42)
-        
-        path, cost, history = run_grasp(
-            50, matrix, 
-            max_iterations=30, 
-            alpha=2, 
-            verbose=True
-        )
-        
-        print(f"\nRésultat final : coût = {cost}")
-        print(f"Chemin : {path[:10]}... (premiers 10 noeuds)")
+    possible_paths = [
+        "instances/grasp/ali535.tsp",
+        "../instances/grasp/ali535.tsp",
+        "../../instances/grasp/ali535.tsp",
+        "ali535.tsp"
+    ]
     
+    found_file = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            found_file = p
+            break
+            
+    if found_file:
+        print(f"Resolution de {found_file}")
+        n, matrix = load_data(found_file)
+        
+        t0 = time.time()
+        path, cost, _ = run_grasp(n, matrix, max_iterations=ITERATIONS, alpha=ALPHA, verbose=True)
+        elapsed = time.time() - t0
+        
+        print(f"Cout: {cost}")
+        print(f"Temps: {elapsed:.2f}s")
+        print(f"Params: alpha={ALPHA}, iter={ITERATIONS}")
+        
+        base_name = os.path.basename(found_file).replace(".in", "").replace(".tsp", "")
+        out_path = f"Solutions/{base_name}_grasp.out"
+        save_solution(out_path, path, cost)
+        export_to_json(found_file, matrix, path, cost, "_grasp")
     else:
-        # Mode par défaut : test sur fichier d'instance
-        print("\nUsage:")
-        print("  python GraspTSP_5.py --calibrate   # Lance la calibration complète")
-        print("  python GraspTSP_5.py --test        # Test rapide sur instance aléatoire")
-        print("  python GraspTSP_5.py <fichier>     # Résout une instance spécifique")
-        
-        # Essayer de charger une instance par défaut
-        default_files = [
-            os.path.join(base_dir, "..", ".." ,"data", "Input", "100.in"),
-            os.path.join(base_dir, "data", "Input", "100.in"),
-            "100.in"
-        ]
-        
-        instance_file = None
-        for f in default_files:
-            if os.path.exists(f):
-                instance_file = f
-                break
-        
-        if instance_file:
-            print(f"\n--- Résolution de {instance_file} ---")
-            n, matrix = load_data(instance_file)
-            
-            # Paramètres calibrés
-            ALPHA = 2
-            ITERATIONS = 30
-            
-            t0 = time.time()
-            path, cost, _ = run_grasp(n, matrix, max_iterations=ITERATIONS, 
-                                      alpha=ALPHA, verbose=True)
-            elapsed = time.time() - t0
-            
-            print(f"\n{'='*40}")
-            print(f"RÉSULTAT FINAL GRASP")
-            print(f"{'='*40}")
-            print(f"Coût de la tournée : {cost}")
-            print(f"Temps d'exécution  : {elapsed:.2f}s")
-            print(f"Paramètres : alpha={ALPHA}, iterations={ITERATIONS}")
-            
-            # Sauvegarder
-            # Sauvegarder
-            base_name = os.path.basename(instance_file).replace(".in", "").replace(".tsp", "")
-            out_path = f"Solutions/{base_name}_grasp.out"
-            save_solution(out_path, path, cost)
-            export_to_json(instance_file, matrix, path, cost, "_grasp")
-        else:
-            print("\nAucune instance trouvée. Lancez avec --test ou --calibrate.")
+        print(f"Fichier {instance_file} introuvable")
